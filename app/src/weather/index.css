@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: light) {
+  :root{
+    --bg : #2F5AF4;
+    --text : #fff;
+    --subtext : #ffffffad;
+    --input : #4c6fef;
+
+  }
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg : #1D2837;
+    --text : #fff;
+    --subtext : #ffffffad;
+    --input : #2c3d55;
+  }
+}
+
+body{
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 16px;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: 'Rubik';
+}
+
+.center{
+  margin: 0 auto;
+  text-align: center;
+}
+
+.flex{
+  display: flex;
+  justify-content: space-between;
+}
+
+.subtext{
+  color: var(--subtext);
+  font-weight: 300;
+}
+
+img{
+  width: 96px;
+  height: 96px;
+}
+
+.temp::after{
+  position: relative;
+  content: var(--type);
+}
+
+#temp_c{
+  --type : "°C"
+}
+
+#temp_f{
+  --type : "°F"
+}
+
+input{
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text);
+  background-color: var(--input);
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  appearance: none;
+  outline: none;
+  margin-top: 10px;
+  font-size: 'Roboto';
+}
+
+input:focus{
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
