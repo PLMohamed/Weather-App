@@ -1,5 +1,7 @@
 var country = localStorage.getItem('country');
 var oldCountry = localStorage.getItem('oldCountry');
+var milliseconds;
+var seconds;
 const area = document.getElementById("location");
 const statusArea = document.getElementById("status");
 const temp_c = document.getElementById("temp_c");
@@ -36,7 +38,9 @@ function render() {
         localStorage.setItem('oldCountry',data.location.name);
         country = localStorage.getItem('country');
         area.innerHTML = country;
-        time.innerHTML = data.location.localtime.split(" ")[1];
+        milliseconds = Date.parse(data.location.localtime);
+        seconds = parseInt(milliseconds / 1000);
+        changeTime();
         img.src = "https:"+data.current.condition.icon;
         statusArea.innerHTML = data.current.condition.text;
         temp_c.innerHTML = data.current.temp_c;
@@ -47,12 +51,38 @@ function render() {
             
 }
 
-input.onkeydown = (e) => {
-    if(e.key == "Enter"){
-        localStorage.setItem('country',input.value);
-        render();
-    }
+function inputRefresh() {
+    localStorage.setItem('country',input.value);
+    render();
 }
 
-setInterval(render,5000);
+var changeTime = () => {
+    seconds++;
+    var minutes = parseInt(seconds /  60 % 60);
+    var hours =  parseInt(seconds / ( 60 * 60) % 24) + 1;
+
+    if(hours <= 3 || hours >= 17)
+        document.querySelector('html').setAttribute('dark-mode','')
+    else
+        document.querySelector('html').removeAttribute('dark-mode')
+
+
+
+    hours = hours >= 10 ? hours : "0" + hours
+    minutes = minutes >= 10 ? minutes : "0" + minutes
+    
+    time.innerHTML = `${hours}:${minutes}`
+
+}
+
+input.onkeydown = (e) => {
+    if(e.key == "Enter")
+        inputRefresh()
+}
+
+input.addEventListener('focusout',inputRefresh)
+
+setInterval(render,1000 * 20);
+setInterval(changeTime,1000)
+
 

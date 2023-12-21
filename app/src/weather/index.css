@@ -5,24 +5,20 @@
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: light) {
-  :root{
-    --bg : #2F5AF4;
-    --text : #fff;
-    --subtext : #ffffffad;
-    --input : #4c6fef;
-
-  }
+:root{
+  --bg : #2F5AF4;
+  --text : #fff;
+  --subtext : #ffffffad;
+  --input : #4c6fef;
 }
 
-@media (prefers-color-scheme: dark){
-  :root{
+
+html[dark-mode]:root{
     --bg : #1D2837;
     --text : #fff;
     --subtext : #ffffffad;
     --input : #2c3d55;
   }
-}
 
 body{
   background: var(--bg);
@@ -34,6 +30,7 @@ body{
   min-height: 100vh;
   padding: 20px;
   font-family: 'Rubik';
+  transition: 300ms;
 }
 
 .center{
