@@ -6,11 +6,11 @@ const config = require('../../config');
 
 const createOptionWindow = () =>{
     var optionWindow = new BrowserWindow({
-        width:400,
-        height:400,
+        width:500,
+        height:500,
         resizable:config.ISDEV === "true" ? true : false,
         autoHideMenuBar:true,
-        icon:path.join(__dirname,"assets/icon.png"),
+        icon:path.join(__dirname,"../assets/icon.png"),
         webPreferences:{
             nodeIntegration:true,
             contextIsolation:true,

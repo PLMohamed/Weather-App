@@ -62,13 +62,13 @@ var changeTime = () => {
     var minutes = parseInt(seconds /  60 % 60);
     var hours =  parseInt(seconds / ( 60 * 60) % 24) + 1;
 
-    if(hours <= 3 || hours >= 17)
+    if(hours <= 4 || hours >= 17)
         document.querySelector('html').setAttribute('dark-mode','')
     else
         document.querySelector('html').removeAttribute('dark-mode')
 
 
-
+    hours = hours === 24 ? 0 : hours
     hours = hours >= 10 ? hours : "0" + hours
     minutes = minutes >= 10 ? minutes : "0" + minutes
     

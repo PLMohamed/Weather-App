@@ -6,8 +6,14 @@ const { createOptionWindow } = require('./modules/option');
 const config = require('../config');
 let optionWindow = null;
 let mainWindow = null;
+const { updateElectronApp } = require('update-electron-app');
+const gotTheLock = app.requestSingleInstanceLock();
 
 
+if (!gotTheLock) {
+  app.quit();
+  return
+}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -105,6 +111,9 @@ function createTray() {
 
 
 app.on('ready', () => {
+  updateElectronApp({
+    updateInterval: '30 min'
+  }); 
   if(BrowserWindow.getAllWindows().length !== 0)
     return;
 

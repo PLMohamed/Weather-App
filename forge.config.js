@@ -40,4 +40,16 @@ module.exports = {
       },
     },
   ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'PLMohamed',
+          name: 'Weather-App'
+        },
+        prerelease: true
+      }
+    }
+  ]
 };
