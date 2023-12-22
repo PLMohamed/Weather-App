@@ -82,7 +82,7 @@ input.onkeydown = (e) => {
 
 input.addEventListener('focusout',inputRefresh)
 
-setInterval(render,1000 * 20);
+setInterval(render,1000 * 60);
 setInterval(changeTime,1000)
 
 

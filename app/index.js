@@ -13,6 +13,7 @@ let mainWindow = null;
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
+  return;
 }
 
 
@@ -47,7 +48,7 @@ const createWindow = () => {
 
   // AutoLaunch
   let autoLaunch = new AutoLaunch({
-    name: 'weather-app',
+    name: 'weather app',
     path: app.getPath('exe'),
   });
 
@@ -56,6 +57,7 @@ const createWindow = () => {
   });
 
   let tray = null;
+
   // MainWindow functions
   mainWindow.on('minimize',(e) => {
     e.preventDefault();
@@ -102,13 +104,18 @@ function createTray() {
   return tray;
 }
 
-app.on('ready', () => mainWindow = createWindow());
+
+app.on('ready', () => {
+  mainWindow = createWindow();
+});
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
 });
+
+
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

@@ -6,7 +6,10 @@ module.exports = {
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      config: {
+        authors: 'PLMohamed',
+        description: 'Weather app'
+      },
     },
     {
       name: '@electron-forge/maker-zip',
@@ -14,17 +17,26 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      config: {
+        authors: 'PLMohamed',
+        description: 'Weather app'
+      },
     },
     {
       name: '@electron-forge/maker-rpm',
-      config: {},
+      config: {
+        authors: 'PLMohamed',
+        description: 'Weather app'
+      },
     },
   ],
   plugins: [
     {
       name: '@electron-forge/plugin-auto-unpack-natives',
-      config: {},
+      config: {
+        authors: 'PLMohamed',
+        description: 'Weather app'
+      },
     },
   ],
 };
