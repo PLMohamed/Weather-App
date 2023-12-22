@@ -15,7 +15,7 @@ input.value = country || localStorage.getItem('oldCountry') || "Algeria";
 if(country)
     render();
 else{
-    localStorage.setItem('country',oldCountry||"Algeria");
+    localStorage.setItem('country',oldCountry||"Mostaganem");
     render();
 }
 
@@ -47,6 +47,7 @@ function render() {
         temp_f.innerHTML = data.current.temp_f;
     }).catch(error => {
         console.error('Error fetching weather data:', error);
+        localStorage.setItem('country',localStorage.getItem('oldCountry'));
     })
             
 }

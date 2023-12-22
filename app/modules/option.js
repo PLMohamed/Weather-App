@@ -1,17 +1,20 @@
 const { BrowserWindow , Menu} = require('electron');
 const path = require('path');
 const { menu } = require('./menus');
+const config = require('../../config');
+
 
 const createOptionWindow = () =>{
     var optionWindow = new BrowserWindow({
         width:400,
         height:400,
-        resizable:process.env.ISDEV === "true" ? true : false,
+        resizable:config.ISDEV === "true" ? true : false,
         autoHideMenuBar:true,
+        icon:path.join(__dirname,"assets/icon.png"),
         webPreferences:{
             nodeIntegration:true,
             contextIsolation:true,
-            devTools:process.env.ISDEV === "true" ? true : false,
+            devTools:config.ISDEV === "true" ? true : false,
         }
     })
 

@@ -3,8 +3,7 @@ const AutoLaunch = require('auto-launch');
 const path = require('path');
 const { menu } = require('./modules/menus');
 const { createOptionWindow } = require('./modules/option');
-const config = require('../forge.config');
-
+const config = require('../config');
 let optionWindow = null;
 let mainWindow = null;
 
@@ -106,19 +105,19 @@ function createTray() {
 
 
 app.on('ready', () => {
+  if(BrowserWindow.getAllWindows().length !== 0)
+    return;
+
   mainWindow = createWindow();
 });
 
 app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
+  if (BrowserWindow.getAllWindows().length === 0) 
     createWindow();
-  }
+  
 });
 
 
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
 const trayMenu = [
   {
     label:"Option",

@@ -1,9 +1,7 @@
-require('dotenv').config();
 module.exports = {
-  API_KEY: process.env.API_KEY,
-  ISDEV : process.env.ISDEV,
   packagerConfig: {
     asar: true,
+    icon:"app/assets/icon"
   },
   rebuildConfig: {},
   makers: [
