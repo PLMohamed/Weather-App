@@ -3,7 +3,7 @@ const AutoLaunch = require('auto-launch');
 const path = require('path');
 const { menu } = require('./modules/menus');
 const { createOptionWindow } = require('./modules/option');
-require("dotenv").config();
+const config = require('../forge.config');
 
 let optionWindow = null;
 let mainWindow = null;
@@ -23,13 +23,13 @@ const createWindow = () => {
   var mainWindow = new BrowserWindow({
     width: 300,
     height: 300,
-    resizable:process.env.ISDEV === "true" ? true:false,
+    resizable:config.ISDEV === "true" ? true:false,
     autoHideMenuBar:true,
     show:false,
     icon:path.join(__dirname,"assets/icon.png"),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      devTools:process.env.ISDEV === "true" ? true:false,
+      devTools:config.ISDEV === "true" ? true:false,
       nodeIntegration:true,
       contextIsolation:true
     },
