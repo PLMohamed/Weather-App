@@ -12,8 +12,15 @@ let mainWindow = null;
 
 
 // Flags
-autoUpdater.autoDownload = false;
+autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
+autoUpdater.setFeedURL({
+  provider: 'github',
+  owner: 'PLMohamed',
+  repo: 'Weather-App',
+  releaseType: 'release'
+});
+
 
 
 // Make sure only one app at the time
@@ -173,6 +180,12 @@ app.on('activate', () => {
 autoUpdater.on('update-available',(info) => {
   let p = autoUpdater.downloadUpdate();
 })
+
+autoUpdater.on('update-downloaded', () => {
+  // You can notify the user that the update is ready and ask for permission to install.
+  // For example, you can show a dialog box.
+  autoUpdater.quitAndInstall();
+});
 
 
 
