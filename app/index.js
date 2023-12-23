@@ -1,6 +1,7 @@
-const { app, BrowserWindow, Menu,Tray } = require('electron');
+const { app, BrowserWindow, Menu,Tray, ipcMain } = require('electron');
 const AutoLaunch = require('auto-launch');
 const path = require('path');
+const fs = require('fs');
 const { menu } = require('./modules/menus');
 const { createOptionWindow } = require('./modules/option');
 const config = require('../config');
@@ -23,7 +24,7 @@ if (require('electron-squirrel-startup')) {
 
 
 // Functions
-const createWindow = () => {
+const createWindow = async () => {
   // Create the browser window.
   var mainWindow = new BrowserWindow({
     width: 300,
@@ -49,7 +50,7 @@ const createWindow = () => {
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 
-  const settings = loadSettings();
+  var settings = await loadSettings();
 
 
   // AutoLaunch
@@ -70,26 +71,36 @@ const createWindow = () => {
     mainWindow.hide();
     tray = createTray();
     
-  })
+  });
 
   mainWindow.on('restore',() =>{
     mainWindow.show();
     tray.destroy();
-  })
+  });
 
   mainWindow.on('close',(e) => {
     e.preventDefault();
     mainWindow.hide();
     tray = createTray();
-  })
+  });
 
   mainWindow.on('ready-to-show',() =>{
     // To make sure api called and content are fully loaded
     setTimeout(() => {
       mainWindow.show();
     }, 100);
-  })
+  });
+
+  // IPC
+  ipcMain.handle('getSettings',async (event) => {
+    settings = await loadSettings();//To update , make sure for any update
+    return settings;
+  });
   
+  ipcMain.on('setSettings',async(event,setting) => {
+    await saveSettings(setting);
+    setting = await loadSettings();
+  });
 
 
 
@@ -128,14 +139,14 @@ function saveSettings(settings){
 }
 
 
-app.on('ready', () => {
+app.on('ready', async () => {
   updateElectronApp({
     updateInterval: '30 min'
   }); 
   if(BrowserWindow.getAllWindows().length !== 0)
     return;
 
-  mainWindow = createWindow();
+  mainWindow = await createWindow();
 });
 
 app.on('activate', () => {
@@ -162,6 +173,7 @@ const trayMenu = [
     label:"Exit",
     click : () => {
       mainWindow.destroy();
+      app.quit();
     }
   }
 ]
