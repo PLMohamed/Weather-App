@@ -9,7 +9,7 @@ let mainWindow = null;
 const { updateElectronApp } = require('update-electron-app');
 const gotTheLock = app.requestSingleInstanceLock();
 
-
+// Make sure only one app at the time
 if (!gotTheLock) {
   app.quit();
   return
@@ -49,6 +49,7 @@ const createWindow = () => {
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 
+  const settings = loadSettings();
 
 
   // AutoLaunch
@@ -58,7 +59,7 @@ const createWindow = () => {
   });
 
   autoLaunch.isEnabled().then((isEnabled) => {
-    if (!isEnabled) autoLaunch.enable();
+    if (!isEnabled && settings.autoLaunch) autoLaunch.enable();
   });
 
   let tray = null;
@@ -95,7 +96,6 @@ const createWindow = () => {
   return mainWindow;
 };
 
-// Functions
 function createTray() {
   let tray = new Tray(path.join(__dirname,"assets/icon.png"));
   tray.setToolTip('Weather App');
@@ -107,6 +107,24 @@ function createTray() {
   tray.setContextMenu(contextMenu);
 
   return tray;
+}
+
+function loadSettings() {
+  const settingsPath = path.join(app.getPath('userData'), 'settings.json');
+  try {
+    const data = fs.readFileSync(settingsPath);
+    return JSON.parse(data);
+  } catch (error) {
+    return {
+      autoLaunch: true,
+      notifications: true
+    };
+  }
+}
+
+function saveSettings(settings){
+  const settingsPath = path.join(app.getPath('userData'), 'settings.json');
+  fs.writeFileSync(settingsPath, JSON.stringify(settings));
 }
 
 

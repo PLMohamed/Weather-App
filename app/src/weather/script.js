@@ -9,21 +9,21 @@ const temp_f = document.getElementById("temp_f");
 const img = document.getElementById("img");
 const time = document.getElementById("time");
 const input = document.querySelector("input");
-input.value = country || localStorage.getItem('oldCountry') || "Algeria";
+input.value = country || localStorage.getItem('oldCountry') || "Mostaganem";
 
 
 if(country)
     render();
 else{
-    localStorage.setItem('country',oldCountry||"Mostaganem");
+    localStorage.setItem('country',oldCountry|| "Mostaganem");
     render();
 }
 
 
 function render() {
-    country = localStorage.getItem('country') || localStorage.getItem('oldCountry') || "Algeria";
+    country = localStorage.getItem('country') || localStorage.getItem('oldCountry') || "Mostaganem";
     location.innerHTML = country;
-    fetch(`https://api.weatherapi.com/v1/current.json?key=${config.apikey()}&q=${country}&aqi=no`,{
+    fetch(`https://api.weatherapi.com/v1/current.json?key=${KeyBridge.apikey()}&q=${country}&aqi=no`,{
         method:"POST",
         headers:{
             "Content-Type":"application/json"
