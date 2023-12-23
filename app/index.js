@@ -1,14 +1,20 @@
 const { app, BrowserWindow, Menu,Tray, ipcMain } = require('electron');
+const { autoUpdater, AppUpdater } = require('electron-updater');
 const AutoLaunch = require('auto-launch');
 const path = require('path');
 const fs = require('fs');
 const { menu } = require('./modules/menus');
 const { createOptionWindow } = require('./modules/option');
 const config = require('../config');
+const gotTheLock = app.requestSingleInstanceLock();
 let optionWindow = null;
 let mainWindow = null;
-const { updateElectronApp } = require('update-electron-app');
-const gotTheLock = app.requestSingleInstanceLock();
+
+
+// Flags
+autoUpdater.autoDownload = false;
+autoUpdater.autoInstallOnAppQuit = true;
+
 
 // Make sure only one app at the time
 if (!gotTheLock) {
@@ -55,7 +61,7 @@ const createWindow = async () => {
 
   // AutoLaunch
   let autoLaunch = new AutoLaunch({
-    name: 'weather app',
+    name: 'Weather App',
     path: app.getPath('exe'),
   });
 
@@ -140,13 +146,12 @@ function saveSettings(settings){
 
 
 app.on('ready', async () => {
-  updateElectronApp({
-    updateInterval: '30 min'
-  }); 
+
   if(BrowserWindow.getAllWindows().length !== 0)
     return;
 
   mainWindow = await createWindow();
+  autoUpdater.checkForUpdates();
 });
 
 app.on('activate', () => {
@@ -155,6 +160,11 @@ app.on('activate', () => {
   
 });
 
+autoUpdater.on('update-available',(info) => {
+  let p = autoUpdater.downloadUpdate();
+})
+
+
 
 const trayMenu = [
   {
@@ -162,6 +172,7 @@ const trayMenu = [
     click : () => {
       if(optionWindow)
         return;
+
       optionWindow = createOptionWindow();
       optionWindow.on('close',() => optionWindow = null)
     }
