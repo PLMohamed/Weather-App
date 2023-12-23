@@ -38,13 +38,24 @@ function render() {
         localStorage.setItem('oldCountry',data.location.name);
         country = localStorage.getItem('country');
         area.innerHTML = country;
+
         milliseconds = Date.parse(data.location.localtime);
         seconds = parseInt(milliseconds / 1000);
         changeTime();
+
         img.src = "https:"+data.current.condition.icon;
+
+        localStorage.setItem('oldCondition',localStorage.getItem('Condition'));
+        localStorage.setItem('Condition',data.current.condition.text);
         statusArea.innerHTML = data.current.condition.text;
+
         temp_c.innerHTML = data.current.temp_c;
         temp_f.innerHTML = data.current.temp_f;
+
+        if(localStorage.getItem('oldCondition') !== localStorage.getItem('Condition'))
+            Notifate.showNotification('Weather app',{content:`The weather in ${country} is ${statusArea.innerHTML}`});
+
+
     }).catch(error => {
         console.error('Error fetching weather data:', error);
         localStorage.setItem('country',localStorage.getItem('oldCountry'));
@@ -62,7 +73,7 @@ var changeTime = () => {
     var minutes = parseInt(seconds /  60 % 60);
     var hours =  parseInt(seconds / ( 60 * 60) % 24) + 1;
 
-    if(hours <= 4 || hours >= 17)
+    if(hours <= 5 || hours >= 18)
         document.querySelector('html').setAttribute('dark-mode','')
     else
         document.querySelector('html').removeAttribute('dark-mode')

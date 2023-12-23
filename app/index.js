@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu,Tray, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu,Tray, ipcMain,Notification } = require('electron');
 const { autoUpdater, AppUpdater } = require('electron-updater');
 const AutoLaunch = require('auto-launch');
 const path = require('path');
@@ -42,7 +42,8 @@ const createWindow = async () => {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       devTools:config.ISDEV === "true" ? true:false,
-      nodeIntegration:true,
+      nodeIntegration:false,
+      sandbox:false,
       contextIsolation:true
     },
   });
@@ -58,36 +59,29 @@ const createWindow = async () => {
 
   var settings = await loadSettings();
 
-
   // AutoLaunch
   let autoLaunch = new AutoLaunch({
     name: 'Weather App',
     path: app.getPath('exe'),
   });
+  
+  settings.autoLaunch === true ? autoLaunch.enable() : autoLaunch.disable(); 
 
-  autoLaunch.isEnabled().then((isEnabled) => {
-    if (!isEnabled && settings.autoLaunch) autoLaunch.enable();
-  });
-
-  let tray = null;
+  let tray = createTray();
 
   // MainWindow functions
   mainWindow.on('minimize',(e) => {
     e.preventDefault();
-    mainWindow.hide();
-    tray = createTray();
-    
+    mainWindow.hide();    
   });
 
   mainWindow.on('restore',() =>{
     mainWindow.show();
-    tray.destroy();
   });
 
   mainWindow.on('close',(e) => {
     e.preventDefault();
     mainWindow.hide();
-    tray = createTray();
   });
 
   mainWindow.on('ready-to-show',() =>{
@@ -105,8 +99,24 @@ const createWindow = async () => {
   
   ipcMain.on('setSettings',async(event,setting) => {
     await saveSettings(setting);
-    setting = await loadSettings();
+    settings = await loadSettings();
+
+    settings.autoLaunch === true ? autoLaunch.enable() : autoLaunch.disable(); 
   });
+
+  ipcMain.on('showNotification',(event,title,body) => {
+    if(!settings.notifications)
+      return;
+
+    const alert = new Notification({
+      title:title,
+      body:body.content,
+      icon:body.icon || null,
+    })
+
+    alert.show();
+    alert.click = () => mainWindow.show();
+  })
 
 
 
