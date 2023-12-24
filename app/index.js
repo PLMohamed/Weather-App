@@ -87,8 +87,7 @@ const createWindow = async () => {
   });
 
   mainWindow.on('close',(e) => {
-    e.preventDefault();
-    mainWindow.hide();
+    app.quit();
   });
 
   mainWindow.on('ready-to-show',() =>{
